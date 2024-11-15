@@ -71,18 +71,20 @@ def download_video():
                     'max_comments': [0],
                 }
             },
-            'socket_timeout': 10,
+            'socket_timeout': 30,
             'extract_flat': False,
             'force_generic_extractor': False,
-            'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
-            'cookiesfrombrowser': ('chrome',),
+            'user_agent': 'Mozilla/5.0 (Linux; Android 12; SM-S906N Build/QP1A.190711.020; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/80.0.3987.119 Mobile Safari/537.36',
             'http_headers': {
-                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-                'Accept-Language': 'en-us,en;q=0.5',
+                'Accept': '*/*',
+                'Accept-Language': 'en-US,en;q=0.5',
+                'Accept-Encoding': 'gzip, deflate',
                 'Sec-Fetch-Mode': 'navigate',
+                'Sec-Fetch-Site': 'same-origin',
+                'Sec-Fetch-Dest': 'document',
             },
-            'sleep_interval': 2,
-            'max_sleep_interval': 5,
+            'sleep_interval': 3,
+            'max_sleep_interval': 6,
             'sleep_interval_requests': 1
         }
         
