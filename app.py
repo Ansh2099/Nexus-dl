@@ -55,12 +55,12 @@ def download_video():
         logger.info(f"Starting download for URL: {url}")
         timestamp = int(time.time())
         ydl_opts = {
-            'format': 'best[height<=720]',  # Limit to 720p to avoid restrictions
+            'format': 'best[height<=720]',
             'noplaylist': True,
             'outtmpl': str(DOWNLOAD_DIR / f'video_{timestamp}_%(title)s.%(ext)s'),
             'quiet': True,
             'no_warnings': True,
-            'max_filesize': 500 * 1024 * 1024,  # 500MB limit
+            'max_filesize': 500 * 1024 * 1024,
             'nocheckcertificate': True,
             'ignoreerrors': False,
             'logtostderr': False,
@@ -74,7 +74,16 @@ def download_video():
             'socket_timeout': 10,
             'extract_flat': False,
             'force_generic_extractor': False,
-            'user_agent': 'Mozilla/5.0 (Linux; Android 12; SM-S906N Build/QP1A.190711.020; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/80.0.3987.119 Mobile Safari/537.36'
+            'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
+            'cookiesfrombrowser': ('chrome',),
+            'http_headers': {
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                'Accept-Language': 'en-us,en;q=0.5',
+                'Sec-Fetch-Mode': 'navigate',
+            },
+            'sleep_interval': 2,
+            'max_sleep_interval': 5,
+            'sleep_interval_requests': 1
         }
         
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
