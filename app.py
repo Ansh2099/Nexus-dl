@@ -45,7 +45,7 @@ def download_file(filename):
 @app.route('/download', methods=['POST'])
 def download_video():
     if check_storage_limit():
-        cleanup_old_downloads()  # Force cleanup if storage limit exceeded
+        cleanup_old_downloads()
     data = request.json
     url = data.get('url')
     
@@ -57,10 +57,23 @@ def download_video():
         ydl_opts = {
             'format': 'best',
             'noplaylist': True,
-            'outtmpl': f'downloads/video_{timestamp}_%(title)s.%(ext)s',
+            'outtmpl': str(DOWNLOAD_DIR / f'video_{timestamp}_%(title)s.%(ext)s'),
             'quiet': True,
             'no_warnings': True,
-            'max_filesize': 500 * 1024 * 1024  # 500MB limit
+            'max_filesize': 500 * 1024 * 1024,  # 500MB limit
+            'cookiesfrombrowser': ('chrome',),  # Use Chrome cookies
+            'nocheckcertificate': True,
+            'ignoreerrors': False,
+            'logtostderr': False,
+            'no_warnings': True,
+            'extractor_args': {'youtube': {
+                'player_client': ['android'],
+                'player_skip': ['webpage', 'config', 'js']
+            }},
+            'socket_timeout': 10,
+            'extract_flat': False,
+            'force_generic_extractor': False,
+            'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.63 Safari/537.36'
         }
         
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
@@ -68,13 +81,28 @@ def download_video():
             video_url = ydl.prepare_filename(info)
             
             if os.path.exists(video_url):
-                # Get just the filename without the 'downloads/' prefix
                 filename = os.path.basename(video_url)
+                logger.info(f"Download successful: {filename}")
                 return jsonify({
                     "message": "Download successful",
-                    "file_path": filename  # Return just the filename
+                    "file_path": filename
                 }), 200
             else:
+                logger.error("File download failed")
+                return jsonify({"error": "File download failed"}), 500
+    except Exception as e:
+        logger.error(f"Download failed: {str(e)}")
+        return jsonify({"error": str(e)}), 500
+            
+            if os.path.exists(video_url):
+                filename = os.path.basename(video_url)
+                logger.info(f"Download successful: {filename}")
+                return jsonify({
+                    "message": "Download successful",
+                    "file_path": filename
+                }), 200
+            else:
+                logger.error("File download failed")
                 return jsonify({"error": "File download failed"}), 500
     except Exception as e:
         logger.error(f"Download failed: {str(e)}")
