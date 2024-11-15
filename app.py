@@ -61,7 +61,6 @@ def download_video():
             'quiet': True,
             'no_warnings': True,
             'max_filesize': 500 * 1024 * 1024,  # 500MB limit
-            'cookiesfrombrowser': ('chrome',),  # Use Chrome cookies
             'nocheckcertificate': True,
             'ignoreerrors': False,
             'logtostderr': False,
