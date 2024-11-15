@@ -93,20 +93,6 @@ def download_video():
     except Exception as e:
         logger.error(f"Download failed: {str(e)}")
         return jsonify({"error": str(e)}), 500
-            
-            if os.path.exists(video_url):
-                filename = os.path.basename(video_url)
-                logger.info(f"Download successful: {filename}")
-                return jsonify({
-                    "message": "Download successful",
-                    "file_path": filename
-                }), 200
-            else:
-                logger.error("File download failed")
-                return jsonify({"error": "File download failed"}), 500
-    except Exception as e:
-        logger.error(f"Download failed: {str(e)}")
-        return jsonify({"error": str(e)}), 500
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
