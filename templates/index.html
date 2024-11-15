@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS • Download</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="background-animation"></div>
+    <div class="container">
+        <div class="download-card">
+            <h1>NEXUS<span class="accent">•</span>DL</h1>
+            <p class="subtitle">Premium Video Downloader</p>
+            <div class="input-group">
+                <input type="text" id="videoUrl" placeholder="Paste your video URL here...">
+                <button id="downloadBtn">Download</button>
+            </div>
+            <div id="status" class="status"></div>
+        </div>
+    </div>
+    <script>
+        document.getElementById('downloadBtn').addEventListener('click', async () => {
+            const status = document.getElementById('status');
+            const url = document.getElementById('videoUrl').value;
+            status.innerHTML = 'Downloading...';
+            status.className = 'status loading';
+            try {
+                const response = await fetch('/download', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url })
+                });
+                const data = await response.json();
+                
+                if (response.ok) {
+                    const downloadUrl = `/downloads/${data.file_path}`;
+                    status.innerHTML = `<a href="${downloadUrl}" class="download-link">Download Ready - Click Here</a>`;
+                    status.className = 'status success';
+                } else {
+                    status.innerHTML = `Error: ${data.error}`;
+                    status.className = 'status error';
+                }
+            } catch (error) {
+                status.innerHTML = 'Download failed. Please try again.';
+                status.className = 'status error';
+            }
+        });
+    </script>
+</body>
+</html>
