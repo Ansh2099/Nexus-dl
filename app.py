@@ -64,15 +64,16 @@ def download_video():
             'nocheckcertificate': True,
             'ignoreerrors': False,
             'logtostderr': False,
-            'no_warnings': True,
-            'extractor_args': {'youtube': {
-                'player_client': ['android'],
-                'player_skip': ['webpage', 'config', 'js']
-            }},
+            'extractor_args': {
+                'youtube': {
+                    'skip': ['dash', 'hls'],
+                    'player_client': ['android', 'web'],
+                }
+            },
             'socket_timeout': 10,
             'extract_flat': False,
             'force_generic_extractor': False,
-            'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.63 Safari/537.36'
+            'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36'
         }
         
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
