@@ -3,10 +3,13 @@ services:
     name: nexus-dl
     env: python
     buildCommand: |
-      sudo apt-get update && sudo apt-get install -y ffmpeg
+      sudo apt-get update
+      sudo apt-get install -y ffmpeg
       pip install -r requirements.txt
     startCommand: gunicorn app:app
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.0
+      - key: PYTHONUNBUFFERED
+        value: "true"
     plan: free 
